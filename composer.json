@@ -1,0 +1,15 @@
+{
+    "name": "there4/slim-test-helpers",
+    "description": "Integration testing helpers for the Slim Framework",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Craig Davis",
+            "email": "craig@there4development.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+
+    }
+}
