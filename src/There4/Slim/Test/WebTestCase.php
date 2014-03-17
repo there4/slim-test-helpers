@@ -9,7 +9,7 @@ class WebTestCase extends \PHPUnit_Framework_TestCase
     {
         // Establish a local reference to the Slim app object
         $this->app = $this->getSlimInstance();
-        $this->client = new WebTestClient($app);
+        $this->client = new WebTestClient($this->app);
     }
 
     // Instantiate a Slim application for use in our testing environment. You

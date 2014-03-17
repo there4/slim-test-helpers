@@ -14,7 +14,7 @@ class WebTestClient
     public $testingMethods = array('get', 'post', 'patch', 'put', 'delete', 'head');
 
     public function __construct($slim) {
-      $this->app = $app;
+      $this->app = $slim;
     }
 
     // Implement our `get`, `post`, and other http operations
