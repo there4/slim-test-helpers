@@ -33,13 +33,20 @@ class WebTestClient
         // Capture STDOUT
         ob_start();
 
-        // Prepare a mock environment
-        \Slim\Environment::mock(array_merge(array(
+        $options = array(
             'REQUEST_METHOD' => strtoupper($method),
             'PATH_INFO'      => $path,
             'SERVER_NAME'    => 'local.dev',
-            'slim.input'     => http_build_query($formVars)
-        ), $optionalHeaders));
+        );
+
+        if ($method === 'get') {
+            $options['QUERY_STRING'] = http_build_query($formVars);
+        } else {
+            $options['slim.input']   = http_build_query($formVars);
+        }
+
+        // Prepare a mock environment
+        \Slim\Environment::mock(array_merge($options, $optionalHeaders));
 
         // Establish some useful references to the slim app properties
         $this->request  = $this->app->request();
