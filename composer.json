@@ -18,7 +18,8 @@
     },
     "minimum-stability": "dev",
     "require": {
-
+        "slim/slim": "2.4.*",
+        "phpunit/phpunit": "3.7.*"
     },
     "autoload": {
         "psr-0": {

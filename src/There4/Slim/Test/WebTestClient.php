@@ -2,6 +2,8 @@
 
 namespace There4\Slim\Test;
 
+use \Slim;
+
 class WebTestClient
 {
     public $app;
@@ -13,12 +15,14 @@ class WebTestClient
     // `__call()` magic method below.
     public $testingMethods = array('get', 'post', 'patch', 'put', 'delete', 'head');
 
-    public function __construct($slim) {
-      $this->app = $slim;
+    public function __construct(Slim\Slim $slim)
+    {
+        $this->app = $slim;
     }
 
     // Implement our `get`, `post`, and other http operations
-    public function __call($method, $arguments) {
+    public function __call($method, $arguments)
+    {
         if (in_array($method, $this->testingMethods)) {
             list($path, $formVars, $headers) = array_pad($arguments, 3, array());
             return $this->request($method, $path, $formVars, $headers);
@@ -46,7 +50,7 @@ class WebTestClient
         }
 
         // Prepare a mock environment
-        \Slim\Environment::mock(array_merge($options, $optionalHeaders));
+        Slim\Environment::mock(array_merge($options, $optionalHeaders));
 
         // Establish some useful references to the slim app properties
         $this->request  = $this->app->request();
@@ -58,7 +62,4 @@ class WebTestClient
         // Return the application output. Also available in `response->body()`
         return ob_get_clean();
     }
-
 }
-
-/* end of file WebTestClient */
