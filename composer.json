@@ -18,7 +18,7 @@
     },
     "minimum-stability": "dev",
     "require": {
-
+        "slim/slim": "2.4.*"
     },
     "autoload": {
         "psr-0": {
