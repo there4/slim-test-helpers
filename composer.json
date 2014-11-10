@@ -1,8 +1,8 @@
 {
     "name": "there4/slim-test-helpers",
-    "version": "0.9.1",
+    "version": "0.9.2",
     "description": "Integration testing helpers for the Slim Framework",
-    "keywords": ["slim"],
+    "keywords": ["slim", "slim testing"],
     "homepage": "https://github.com/there4/slim-test-helpers",
     "type": "library",
     "license": "MIT",
