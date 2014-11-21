@@ -13,12 +13,13 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
      * @dataProvider getValidRequests
      * @param string $name
      * @param string $uri
+     * @param mixed $input
      */
-    public function testValidRequests($name, $uri)
+    public function testValidRequests($name, $uri, $input)
     {
         $client = new WebTestClient($this->getSlimInstance());
         $expectedOutput = 'This is a test!';
-        call_user_func(array($client, $name), $uri);
+        call_user_func(array($client, $name), $uri, $input);
         $this->assertSame(200, $client->response->status());
         $this->assertSame($expectedOutput, $client->response->body());
     }
@@ -37,7 +38,8 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
         $methods = $this->getValidRequestMethods();
         $uri = $this->getValidUri();
         return array_map(function ($value) use ($uri) {
-            return array($value, $uri);
+            $input = ($value == 'post') ? 'test data' : array();
+            return array($value, $uri, $input);
         }, $methods);
     }
 
