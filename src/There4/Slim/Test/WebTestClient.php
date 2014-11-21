@@ -24,15 +24,15 @@ class WebTestClient
     public function __call($method, $arguments)
     {
         if (in_array($method, $this->testingMethods)) {
-            list($path, $formVars, $headers) = array_pad($arguments, 3, array());
-            return $this->request($method, $path, $formVars, $headers);
+            list($path, $data, $headers) = array_pad($arguments, 3, array());
+            return $this->request($method, $path, $data, $headers);
         }
         throw new \BadMethodCallException(strtoupper($method) . ' is not supported');
     }
 
     // Abstract way to make a request to SlimPHP, this allows us to mock the
     // slim environment
-    private function request($method, $path, $formVars = array(), $optionalHeaders = array())
+    private function request($method, $path, $data = array(), $optionalHeaders = array())
     {
         // Capture STDOUT
         ob_start();
@@ -40,13 +40,15 @@ class WebTestClient
         $options = array(
             'REQUEST_METHOD' => strtoupper($method),
             'PATH_INFO'      => $path,
-            'SERVER_NAME'    => 'local.dev',
+            'SERVER_NAME'    => 'local.dev'
         );
 
         if ($method === 'get') {
-            $options['QUERY_STRING'] = http_build_query($formVars);
+            $options['QUERY_STRING'] = http_build_query($data);
+        } else if (is_array($data)) {
+            $options['slim.input']   = http_build_query($data);
         } else {
-            $options['slim.input']   = http_build_query($formVars);
+            $options['slim.input']   = $data;
         }
 
         // Prepare a mock environment
