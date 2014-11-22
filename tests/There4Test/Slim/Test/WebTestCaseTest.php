@@ -20,7 +20,8 @@ class WebTestCaseTest extends \PHPUnit_Framework_TestCase
             'debug'   => false,
             'mode'    => 'testing'
         );
-        $slim = (new WebTestCase())->getSlimInstance();
+        $testCase = new WebTestCase();
+        $slim = $testCase->getSlimInstance();
         $this->assertInstanceOf('\Slim\Slim', $slim);
         foreach ($expectedConfig as $key => $value) {
             $this->assertSame($expectedConfig[$key], $slim->config($key));

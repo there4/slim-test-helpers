@@ -46,7 +46,8 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
     private function getSlimInstance()
     {
         if (!$this->slim) {
-            $this->slim = (new WebTestCase())->getSlimInstance();
+            $testCase = new WebTestCase();
+            $this->slim = $testCase->getSlimInstance();
             $methods = $this->getValidRequestMethods();
             $callback = function () {
                 echo 'This is a test!';
