@@ -11,4 +11,4 @@ before_script:
 
 script:
   - vendor/bin/phpunit --verbose --coverage-text
-  - vendor/bin/phpcs --standard=PSR2 --extensions=php src
+  - vendor/bin/phpcs --standard=PSR2 --extensions=php src tests
