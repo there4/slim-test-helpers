@@ -45,7 +45,7 @@ class WebTestClient
 
         if ($method === 'get') {
             $options['QUERY_STRING'] = http_build_query($data);
-        } else if (is_array($data)) {
+        } elseif (is_array($data)) {
             $options['slim.input']   = http_build_query($data);
         } else {
             $options['slim.input']   = $data;
