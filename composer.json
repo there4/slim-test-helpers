@@ -35,5 +35,9 @@
         "psr-0": {
             "There4Test": "tests/"
         }
+    },
+    "scripts": {
+        "test" : "vendor/bin/phpunit --verbose --coverage-text",
+        "sniff" : "vendor/bin/phpcs --standard=PSR2 --extensions=php src tests"
     }
 }
