@@ -21,6 +21,9 @@
         "slim/slim": "2.4.*",
         "phpunit/phpunit": "3.7.*"
     },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "1.*"
+    },
     "autoload": {
         "psr-0": {
             "There4": "src/"
