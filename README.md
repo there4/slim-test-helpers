@@ -19,6 +19,32 @@ class VersionTest extends LocalWebTestCase {
 }
 ```
 
+Here is an example on how to pass data to a POST endpoint in a test case and retrieve it later in the endpoint.   
+We are passing encoded JSON data in the body of the request.   
+The data is retrieved in the endpoint using ```$app->request->getBody()```.
+
+```php
+// test file
+class UserTest extends LocalWebTestCase {
+    public function testVersion() {
+        ......
+        $data = array("user" => 1);
+        $data = json_encode($data);
+        $this->client->post('/user', $data);
+        ......
+    }
+}
+
+// endpoint file
+.....
+$app->post('/user', function() use ($app){
+   .....
+   $data = $app->request->getBody();
+   $data = json_decode($data, true);
+   ......
+});
+```
+
 ## Setup
 
 You'll need a bootstrap file for phpunit that can instantiate your Slim
