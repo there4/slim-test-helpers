@@ -53,6 +53,10 @@ class WebTestClient
 
         // Prepare a mock environment
         Slim\Environment::mock(array_merge($options, $optionalHeaders));
+        $env = Slim\Environment::getInstance();
+        $this->app->router = new NoCacheRouter($this->app->router);
+        $this->app->request = new Slim\Http\Request($env);
+        $this->app->response = new Slim\Http\Response();
 
         // Establish some useful references to the slim app properties
         $this->request  = $this->app->request();
