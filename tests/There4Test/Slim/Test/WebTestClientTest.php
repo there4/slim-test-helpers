@@ -33,6 +33,22 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
         $client->foo($this->getValidUri());
     }
 
+    public function testMultipleRequest()
+    {
+        $this->getSlimInstance()->get('/:id', function ($id) {
+            echo "$id";
+        });
+
+        $client = new WebTestClient($this->getSlimInstance());
+        $client->get('/12');
+        $this->assertSame(200, $client->response->status());
+        $this->assertSame('12', $client->response->body());
+
+        $client->get('/14');
+        $this->assertSame(200, $client->response->status());
+        $this->assertSame('14', $client->response->body());
+    }
+
     public function getValidRequests()
     {
         $methods = $this->getValidRequestMethods();

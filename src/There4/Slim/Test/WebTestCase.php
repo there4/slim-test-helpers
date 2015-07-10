@@ -21,10 +21,17 @@ class WebTestCase extends \PHPUnit_Framework_TestCase
     // will most likely override this for your own application.
     public function getSlimInstance()
     {
-        return new Slim(array(
+        $slim = new Slim(array(
             'version' => '0.0.0',
             'debug'   => false,
             'mode'    => 'testing'
         ));
+        // force to overwrite the App singleton, so that \Slim\Slim::getInstance()
+        // returns the correct instance.
+        $slim->setName('default');
+
+        // make sure we don't use a caching router
+        $slim->router = new NoCacheRouter($slim->router);
+        return $slim;
     }
 }
