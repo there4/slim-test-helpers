@@ -10,24 +10,44 @@ class WebTestClient
     public $request;
     public $response;
 
-    // We support these methods for testing. These are available via
-    // `this->get()` and `$this->post()`. This is accomplished with the
-    // `__call()` magic method below.
-    public $testingMethods = array('get', 'post', 'patch', 'put', 'delete', 'head');
-
     public function __construct(Slim\Slim $slim)
     {
         $this->app = $slim;
     }
 
-    // Implement our `get`, `post`, and other http operations
     public function __call($method, $arguments)
     {
-        if (in_array($method, $this->testingMethods)) {
-            list($path, $data, $headers) = array_pad($arguments, 3, array());
-            return $this->request($method, $path, $data, $headers);
-        }
         throw new \BadMethodCallException(strtoupper($method) . ' is not supported');
+    }
+
+    public function get($path, $data = array(), $optionalHeaders = array())
+    {
+        $this->request('get', $path, $data, $optionalHeaders);
+    }
+
+    public function post($path, $data = array(), $optionalHeaders = array())
+    {
+        $this->request('post', $path, $data, $optionalHeaders);
+    }
+
+    public function patch($path, $data = array(), $optionalHeaders = array())
+    {
+        $this->request('patch', $path, $data, $optionalHeaders);
+    }
+
+    public function put($path, $data = array(), $optionalHeaders = array())
+    {
+        $this->request('put', $path, $data, $optionalHeaders);
+    }
+
+    public function delete($path, $data = array(), $optionalHeaders = array())
+    {
+        $this->request('delete', $path, $data, $optionalHeaders);
+    }
+
+    public function head($path, $data = array(), $optionalHeaders = array())
+    {
+        $this->request('head', $path, $data, $optionalHeaders);
     }
 
     // Abstract way to make a request to SlimPHP, this allows us to mock the
