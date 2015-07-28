@@ -6,8 +6,13 @@ use \Slim;
 
 class WebTestClient
 {
+    /** @var \Slim\Slim */
     public $app;
+
+    /** @var  \Slim\Http\Request */
     public $request;
+
+    /** @var  \Slim\Http\Response */
     public $response;
 
     // We support these methods for testing. These are available via

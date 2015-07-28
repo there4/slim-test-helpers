@@ -6,7 +6,10 @@ use \Slim\Slim;
 
 class WebTestCase extends \PHPUnit_Framework_TestCase
 {
+    /** @var \Slim\Slim */
     protected $app;
+
+    /** @var WebTestClient */
     protected $client;
 
     // Run for each unit test to setup our slim app environment
