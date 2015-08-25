@@ -49,6 +49,17 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('14', $client->response->body());
     }
 
+    public function testBodyResponse()
+    {
+        $this->getSlimInstance()->get('/', function () {
+            echo "body";
+        });
+
+        $client = new WebTestClient($this->getSlimInstance());
+        $body = $client->get('/');
+        $this->assertSame('body', $body);
+    }
+
     public function getValidRequests()
     {
         $methods = $this->getValidRequestMethods();
@@ -77,7 +88,7 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
 
     private function getValidRequestMethods()
     {
-        return array('get', 'post', 'patch', 'put', 'delete');
+        return array('get', 'post', 'patch', 'put', 'delete', 'options');
     }
 
     private function getValidUri()

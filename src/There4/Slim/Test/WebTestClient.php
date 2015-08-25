@@ -27,32 +27,37 @@ class WebTestClient
 
     public function get($path, $data = array(), $optionalHeaders = array())
     {
-        $this->request('get', $path, $data, $optionalHeaders);
+        return $this->request('get', $path, $data, $optionalHeaders);
     }
 
     public function post($path, $data = array(), $optionalHeaders = array())
     {
-        $this->request('post', $path, $data, $optionalHeaders);
+        return $this->request('post', $path, $data, $optionalHeaders);
     }
 
     public function patch($path, $data = array(), $optionalHeaders = array())
     {
-        $this->request('patch', $path, $data, $optionalHeaders);
+        return $this->request('patch', $path, $data, $optionalHeaders);
     }
 
     public function put($path, $data = array(), $optionalHeaders = array())
     {
-        $this->request('put', $path, $data, $optionalHeaders);
+        return $this->request('put', $path, $data, $optionalHeaders);
     }
 
     public function delete($path, $data = array(), $optionalHeaders = array())
     {
-        $this->request('delete', $path, $data, $optionalHeaders);
+        return $this->request('delete', $path, $data, $optionalHeaders);
     }
 
     public function head($path, $data = array(), $optionalHeaders = array())
     {
-        $this->request('head', $path, $data, $optionalHeaders);
+        return $this->request('head', $path, $data, $optionalHeaders);
+    }
+
+    public function options($path, $data = array(), $optionalHeaders = array())
+    {
+        return $this->request('options', $path, $data, $optionalHeaders);
     }
 
     // Abstract way to make a request to SlimPHP, this allows us to mock the
