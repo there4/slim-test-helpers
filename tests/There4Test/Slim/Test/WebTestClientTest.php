@@ -77,7 +77,7 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
 
     private function getValidRequestMethods()
     {
-        return array('get', 'post', 'patch', 'put', 'delete');
+        return array('get', 'post', 'patch', 'put', 'delete', 'options');
     }
 
     private function getValidUri()

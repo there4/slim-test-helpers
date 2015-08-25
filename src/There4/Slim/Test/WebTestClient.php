@@ -55,6 +55,11 @@ class WebTestClient
         $this->request('head', $path, $data, $optionalHeaders);
     }
 
+    public function options($path, $data = array(), $optionalHeaders = array())
+    {
+        $this->request('options', $path, $data, $optionalHeaders);
+    }
+
     // Abstract way to make a request to SlimPHP, this allows us to mock the
     // slim environment
     private function request($method, $path, $data = array(), $optionalHeaders = array())
