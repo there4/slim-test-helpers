@@ -49,6 +49,17 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('14', $client->response->body());
     }
 
+    public function testBodyResponse()
+    {
+        $this->getSlimInstance()->get('/', function () {
+            echo "body";
+        });
+
+        $client = new WebTestClient($this->getSlimInstance());
+        $body = $client->get('/');
+        $this->assertSame('body', $body);
+    }
+
     public function getValidRequests()
     {
         $methods = $this->getValidRequestMethods();
