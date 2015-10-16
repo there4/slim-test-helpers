@@ -47,7 +47,7 @@ $app->post('/user', function() use ($app){
 
 ### Example with DbUnit
 
-If you with to use Database fixture, use class `WebDbTestCase`.
+If you with to use Database fixture, use class `WebDbTestCase`. Caution: make sure the names you use for you fixture models won't conflict with your actual DB tables.
 
 ```php
 class LocalDbWebTestCase extends \There4\Slim\Test\WebDbTestCase {
