@@ -45,6 +45,22 @@ $app->post('/user', function() use ($app){
 });
 ```
 
+### Example with DbUnit
+
+If you with to use Database fixture, use class `WebDbTestCase`.
+
+```php
+class LocalDbWebTestCase extends \There4\Slim\Test\WebDbTestCase {
+	/**
+	 * You must implement this method
+	 * @return PHPUnit_Extensions_Database_DataSet_IDataSet
+	 */
+	public function getDataSet() {
+		return $this->createFlatXMLDataSet(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fixture.xml');
+	}
+}
+```
+
 ## Setup
 
 You'll need a bootstrap file for phpunit that can instantiate your Slim
