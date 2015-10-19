@@ -5,7 +5,6 @@ namespace There4\Slim\Test;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use \Slim\Slim;
 
-// @todo write unit tests
 class WebDbTestCase extends \PHPUnit_Extensions_Database_TestCase
 {
     /** @var \Slim\Slim */
