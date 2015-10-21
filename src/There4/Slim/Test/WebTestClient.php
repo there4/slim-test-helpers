@@ -30,9 +30,9 @@ class WebTestClient
         return $this->request('get', $path, $data, $optionalHeaders);
     }
 
-    public function post($path, $data = array(), $optionalHeaders = array())
+    public function post($path, $data = array(), $optionalHeaders = array(), $queryString = array())
     {
-        return $this->request('post', $path, $data, $optionalHeaders);
+        return $this->request('post', $path, $data, $optionalHeaders, $queryString);
     }
 
     public function patch($path, $data = array(), $optionalHeaders = array())
@@ -62,7 +62,7 @@ class WebTestClient
 
     // Abstract way to make a request to SlimPHP, this allows us to mock the
     // slim environment
-    private function request($method, $path, $data = array(), $optionalHeaders = array())
+    private function request($method, $path, $data = array(), $optionalHeaders = array(), $queryString = null)
     {
         // Capture STDOUT
         ob_start();
@@ -72,6 +72,11 @@ class WebTestClient
             'PATH_INFO'      => $path,
             'SERVER_NAME'    => 'local.dev'
         );
+
+        if ($queryString) {
+            // This allows post method to use a querystring
+            $options['QUERY_STRING'] = http_build_query($queryString);
+        }
 
         if ($method === 'get') {
             $options['QUERY_STRING'] = http_build_query($data);
@@ -98,4 +103,5 @@ class WebTestClient
         // Return the application output. Also available in `response->body()`
         return ob_get_clean();
     }
+
 }
