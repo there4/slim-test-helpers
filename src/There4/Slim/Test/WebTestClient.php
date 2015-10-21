@@ -103,5 +103,4 @@ class WebTestClient
         // Return the application output. Also available in `response->body()`
         return ob_get_clean();
     }
-
 }
