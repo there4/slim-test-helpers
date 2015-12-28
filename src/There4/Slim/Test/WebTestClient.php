@@ -15,6 +15,8 @@ class WebTestClient
     /** @var  \Slim\Http\Response */
     public $response;
 
+    private $cookies = array();
+
     public function __construct(Slim\Slim $slim)
     {
         $this->app = $slim;
@@ -92,10 +94,22 @@ class WebTestClient
         $this->request  = $this->app->request();
         $this->response = $this->app->response();
 
+        //apply cookies (if present)
+        if ($this->cookies) {
+            foreach ($this->cookies as $name => $value) {
+                $this->request->cookies->set($name, $value);
+            }
+        }
+
         // Execute our app
         $this->app->run();
 
         // Return the application output. Also available in `response->body()`
         return ob_get_clean();
+    }
+
+    public function setCookie($name, $value)
+    {
+        $this->cookies[$name] = $value;
     }
 }
