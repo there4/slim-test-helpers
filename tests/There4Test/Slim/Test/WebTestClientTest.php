@@ -86,6 +86,20 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
         return $this->slim;
     }
 
+    public function testCookieSetInRequest()
+    {
+        $this->getSlimInstance()->get('/', function ($req, $res) {
+            return $res->write("body");
+        });
+
+        $client = new WebTestClient($this->getSlimInstance());
+        $key = "my_cookie";
+        $value = "test";
+        $client->setCookie($key, $value);
+        $body = $client->get('/');
+        $this->assertSame($value, $client->request->getCookieParams()[$key]);
+    }
+
     private function getValidRequestMethods()
     {
         return array('get', 'post', 'patch', 'put', 'delete', 'options');

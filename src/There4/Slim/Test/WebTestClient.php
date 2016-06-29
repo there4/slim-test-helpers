@@ -95,7 +95,7 @@ class WebTestClient
         $cookies = $this->cookies;
         $serverParams = $env->all();
         $body = new RequestBody();
-        $this->request  = new Request($method,  $uri, $headers, $cookies, $serverParams, $body);
+        $this->request  = new Request($method, $uri, $headers, $cookies, $serverParams, $body);
         $this->response = new Response();
 
         // Invoke app
