@@ -21,9 +21,9 @@ class WebDbTestCaseTest extends \PHPUnit_Framework_TestCase
         );
         $testCase = new WebDbTestCase();
         $slim = $testCase->getSlimInstance();
-        $this->assertInstanceOf('\Slim\Slim', $slim);
+        $this->assertInstanceOf('\Slim\App', $slim);
         foreach ($expectedConfig as $key => $value) {
-            $this->assertSame($expectedConfig[$key], $slim->config($key));
+              $this->assertSame($expectedConfig[$key], $slim->getContainer()->get('settings')[$key]);
         }
     }
 }

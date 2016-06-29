@@ -3,11 +3,11 @@
 namespace There4\Slim\Test;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
-use \Slim\Slim;
+use \Slim\App;
 
 class WebDbTestCase extends \PHPUnit_Extensions_Database_TestCase
 {
-    /** @var \Slim\Slim */
+    /** @var \Slim\App */
     protected $app;
 
     /** @var WebTestClient */
@@ -27,17 +27,18 @@ class WebDbTestCase extends \PHPUnit_Extensions_Database_TestCase
     public function getSlimInstance()
     {
         // @todo Find a way not to duplicate code from WebTestCase. Using trait file?
-        $slim = new Slim(array(
+        $slim = new App(array(
+          'settings' => [
             'version' => '0.0.0',
-            'debug' => false,
-            'mode' => 'testing'
+            'debug'   => false,
+            'mode'    => 'testing']
         ));
-        // force to overwrite the App singleton, so that \Slim\Slim::getInstance()
+        // force to overwrite the App singleton, so that \Slim\App::getInstance()
         // returns the correct instance.
-        $slim->setName('default');
+        // $slim->setName('default');
 
         // make sure we don't use a caching router
-        $slim->router = new NoCacheRouter($slim->router);
+        //$slim->router = new NoCacheRouter($slim->router);
         return $slim;
     }
 

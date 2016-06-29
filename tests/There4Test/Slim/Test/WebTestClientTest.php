@@ -20,8 +20,8 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
         $client = new WebTestClient($this->getSlimInstance());
         $expectedOutput = 'This is a test!';
         call_user_func(array($client, $name), $uri, $input);
-        $this->assertSame(200, $client->response->status());
-        $this->assertSame($expectedOutput, $client->response->body());
+        $this->assertSame(200, $client->response->getStatusCode());
+        $this->assertSame($expectedOutput, (string)$client->response->getBody());
     }
 
     /**
@@ -35,24 +35,24 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
 
     public function testMultipleRequest()
     {
-        $this->getSlimInstance()->get('/:id', function ($id) {
-            echo "$id";
+        $this->getSlimInstance()->get('/{id}', function ($req, $res, $args) {
+            return $res->write($args['id']);
         });
 
         $client = new WebTestClient($this->getSlimInstance());
         $client->get('/12');
-        $this->assertSame(200, $client->response->status());
-        $this->assertSame('12', $client->response->body());
+        $this->assertSame(200, $client->response->getStatusCode());
+        $this->assertSame('12', (string)$client->response->getBody());
 
         $client->get('/14');
-        $this->assertSame(200, $client->response->status());
-        $this->assertSame('14', $client->response->body());
+        $this->assertSame(200, $client->response->getStatusCode());
+        $this->assertSame('14', (string)$client->response->getBody());
     }
 
     public function testBodyResponse()
     {
-        $this->getSlimInstance()->get('/', function () {
-            echo "body";
+        $this->getSlimInstance()->get('/', function ($req, $res) {
+            return $res->write("body");
         });
 
         $client = new WebTestClient($this->getSlimInstance());
@@ -76,8 +76,8 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
             $testCase = new WebTestCase();
             $this->slim = $testCase->getSlimInstance();
             $methods = $this->getValidRequestMethods();
-            $callback = function () {
-                echo 'This is a test!';
+            $callback = function ($req, $res) {
+                return $res->write('This is a test!');
             };
             foreach ($methods as $method) {
                 $this->slim->$method($this->getValidUri(), $callback);
