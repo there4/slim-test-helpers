@@ -20,9 +20,9 @@
     },
     "minimum-stability": "dev",
     "require": {
-        "slim/slim": "^3.1",
-        "phpunit/phpunit": "^5.4",
-        "phpunit/dbunit": "^2.0",
+        "slim/slim": "3.*",
+        "phpunit/phpunit": "5.*",
+        "phpunit/dbunit": "2.*",
         "illuminate/database": ">=4.0"
     },
     "require-dev": {
