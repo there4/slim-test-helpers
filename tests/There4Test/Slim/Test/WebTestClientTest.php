@@ -80,7 +80,7 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
                 return $res->write('This is a test!');
             };
             foreach ($methods as $method) {
-                $this->slim->$method($this->getValidUri(), $callback);
+                $this->slim->map([$method], $this->getValidUri(), $callback);
             }
         }
         return $this->slim;
@@ -102,7 +102,7 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
 
     private function getValidRequestMethods()
     {
-        return array('get', 'post', 'patch', 'put', 'delete', 'options');
+        return array('get', 'post', 'patch', 'put', 'delete', 'options', 'head');
     }
 
     private function getValidUri()
