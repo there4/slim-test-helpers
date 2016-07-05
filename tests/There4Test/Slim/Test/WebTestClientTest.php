@@ -20,8 +20,8 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
         $client = new WebTestClient($this->getSlimInstance());
         $expectedOutput = 'This is a test!';
         call_user_func(array($client, $name), $uri, $input);
-        $this->assertSame(200, $client->response->getStatusCode());
-        $this->assertSame($expectedOutput, (string)$client->response->getBody());
+        $this->assertEquals(200, $client->response->getStatusCode());
+        $this->assertEquals($expectedOutput, (string)$client->response->getBody());
     }
 
     /**
@@ -41,12 +41,12 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
 
         $client = new WebTestClient($this->getSlimInstance());
         $client->get('/12');
-        $this->assertSame(200, $client->response->getStatusCode());
-        $this->assertSame('12', (string)$client->response->getBody());
+        $this->assertEquals(200, $client->response->getStatusCode());
+        $this->assertEquals('12', (string)$client->response->getBody());
 
         $client->get('/14');
-        $this->assertSame(200, $client->response->getStatusCode());
-        $this->assertSame('14', (string)$client->response->getBody());
+        $this->assertEquals(200, $client->response->getStatusCode());
+        $this->assertEquals('14', (string)$client->response->getBody());
     }
 
     public function testBodyResponse()
@@ -57,7 +57,7 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
 
         $client = new WebTestClient($this->getSlimInstance());
         $body = $client->get('/');
-        $this->assertSame('body', $body);
+        $this->assertEquals('body', $body);
     }
 
     public function getValidRequests()
@@ -97,7 +97,7 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
         $value = "test";
         $client->setCookie($key, $value);
         $body = $client->get('/');
-        $this->assertSame($value, $client->request->getCookieParams()[$key]);
+        $this->assertEquals($value, $client->request->getCookieParams()[$key]);
     }
 
     private function getValidRequestMethods()

@@ -11,7 +11,10 @@ class WebDbTestCase extends \PHPUnit_Extensions_Database_TestCase
     protected $app;
 
     /** @var WebTestClient */
-    protected $client;
+    public $client;
+
+    /** Database Connection **/
+    protected $conn;
 
     // Run for each unit test to setup our slim app environment
     public function setup()
@@ -26,30 +29,20 @@ class WebDbTestCase extends \PHPUnit_Extensions_Database_TestCase
     // will most likely override this for your own application.
     public function getSlimInstance()
     {
-        // @todo Find a way not to duplicate code from WebTestCase. Using trait file?
-        $slim = new App(array(
-          'settings' => [
-            'version' => '0.0.0',
-            'debug'   => false,
-            'mode'    => 'testing']
-        ));
-        // force to overwrite the App singleton, so that \Slim\App::getInstance()
-        // returns the correct instance.
-        // $slim->setName('default');
-
-        // make sure we don't use a caching router
-        //$slim->router = new NoCacheRouter($slim->router);
-        return $slim;
+        return SlimInstance::getInstance();
     }
 
     public function getConnection()
     {
-        $pdo = Eloquent::getConnectionResolver()->connection()->getPdo();
-        return $this->createDefaultDBConnection($pdo, ':memory:');
+        if ($this->conn === null) {
+            $pdo = new \PDO('sqlite::memory:');
+            $this->conn = $this->createDefaultDBConnection($pdo, ':memory:');
+        }
+        return $this->conn;
     }
 
     public function getDataSet()
     {
-        throw new \Exception('Method getDataSet() not implemented!');
+         return new \PHPUnit_Extensions_Database_DataSet_QueryDataSet($this->getConnection());
     }
 }

@@ -96,13 +96,13 @@ class WebTestClient
         $serverParams = $env->all();
         $body = new RequestBody();
         $this->request  = new Request($method, $uri, $headers, $cookies, $serverParams, $body);
-        $this->response = new Response();
+        $response = new Response();
 
-        // Invoke app
+        // Invoke request
         $app = $this->app;
-        $app($this->request, $this->response);
+        $this->response = $app($this->request, $response);
 
-        // Return the application output. Also available in `response->getBody()`
+        // Return the application output.
         return (string)$this->response->getBody();
     }
 

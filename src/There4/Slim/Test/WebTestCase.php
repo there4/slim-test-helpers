@@ -16,26 +16,14 @@ class WebTestCase extends \PHPUnit_Framework_TestCase
     public function setup()
     {
         // Establish a local reference to the Slim app object
+        // Ensure no cache Router
         $this->app = $this->getSlimInstance();
         $this->client = new WebTestClient($this->app);
     }
 
-    // Instantiate a Slim application for use in our testing environment. You
-    // will most likely override this for your own application.
+    // Return the configured Slim App object
     public function getSlimInstance()
     {
-        $slim = new App(array(
-          'settings' => [
-            'version' => '0.0.0',
-            'debug'   => false,
-            'mode'    => 'testing']
-        ));
-        // force to overwrite the App singleton, so that \Slim\App::getInstance()
-        // returns the correct instance.
-        //$slim->setName('default');
-
-        // make sure we don't use a caching router
-        // $slim->getContainer()->router = new NoCacheRouter($slim->getContainer()->router);
-        return $slim;
+        return SlimInstance::getInstance();
     }
 }
