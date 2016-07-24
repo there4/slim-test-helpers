@@ -59,13 +59,25 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
         $body = $client->get('/');
         $this->assertEquals('body', $body);
     }
+  
+    public function testPostParametersTransferred()
+    {
+        $this->getSlimInstance()->post('/post', function ($req, $res) {
+            return $res->write((string) $req->getBody());
+        });
+
+        $client = new WebTestClient($this->getSlimInstance());
+        $data = ['test' => 'data'];
+        $body = $client->post('/post', $data);
+        $this->assertEquals(json_encode($data), $body);
+    }
 
     public function getValidRequests()
     {
         $methods = $this->getValidRequestMethods();
         $uri = $this->getValidUri();
         return array_map(function ($value) use ($uri) {
-            $input = ($value == 'post') ? 'test data' : array();
+            $input = ($value == 'post') ? ['test => data'] : array();
             return array($value, $uri, $input);
         }, $methods);
     }

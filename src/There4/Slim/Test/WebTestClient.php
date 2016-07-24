@@ -82,10 +82,8 @@ class WebTestClient
 
         if ($method === 'GET') {
             $options['QUERY_STRING'] = http_build_query($data);
-        } elseif (is_array($data)) {
-            $options['slim.input']   = http_build_query($data);
         } else {
-            $options['slim.input']   = $data;
+            $params  = json_encode($data);
         }
 
         // Prepare a mock environment
@@ -95,6 +93,13 @@ class WebTestClient
         $cookies = $this->cookies;
         $serverParams = $env->all();
         $body = new RequestBody();
+      
+        // Attach JSON request
+        if (isset($params)) {
+            $headers->set('Content-Type', 'application/json;charset=utf8');
+            $body->write($params);
+        }
+      
         $this->request  = new Request($method, $uri, $headers, $cookies, $serverParams, $body);
         $response = new Response();
 
