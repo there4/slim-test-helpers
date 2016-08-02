@@ -24,7 +24,7 @@ class VersionTest extends LocalWebTestCase
 Here is an example on how to pass data to a POST endpoint in a test case and 
 retrieve it later in the endpoint. We are passing encoded JSON data in the body
 of the request. The data is retrieved in the endpoint using 
-```$app->request->getBody()```.
+`$app->request->getBody()`.
 
 ```php
 // test file
@@ -74,11 +74,9 @@ class LocalDbWebTestCase extends \There4\Slim\Test\WebDbTestCase
 
 ## Setup
 
-You'll need a bootstrap file for phpunit that can instantiate your Slim
-application. You can see [an example boostrap] in [the sample app][example].
+You'll need a bootstrap file for phpunit that can instantiate your Slim application. You can see [an example boostrap] in [the sample app][example].
 
-You'll implement your own `getSlimInstance()` method that returns an instance of
-your app [by extending][webtestcase] the `WebTestCase` helper.
+You'll implement your own `getSlimInstance()` method that returns an instance of your app [by extending][webtestcase] the `WebTestCase` helper.
 
 [example]: https://github.com/there4/slim-unit-testing-example
 [bootstrap]: https://github.com/there4/slim-unit-testing-example/blob/master/tests/bootstrap.php
