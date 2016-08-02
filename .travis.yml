@@ -12,5 +12,5 @@ script:
   - vendor/bin/phpcs --standard=PSR2 --extensions=php src tests
 
 after_script:
-  - CODECLIMATE_REPO_TOKEN="c64749943f452f321fb2f11676453b71404edd1a36df06ab06c2337d6cbe9980" bin/test-reporter --stdout > codeclimate.json
+  - CODECLIMATE_REPO_TOKEN="c64749943f452f321fb2f11676453b71404edd1a36df06ab06c2337d6cbe9980" vendor/bin/test-reporter --stdout > codeclimate.json
   - "curl -X POST -d @codeclimate.json -H 'Content-Type: application/json' -H 'User-Agent: Code Climate (PHP Test Reporter v0.1.1)' https://codeclimate.com/test_reports"

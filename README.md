@@ -1,4 +1,4 @@
-# Slim Test Helpers [![Build Status](https://travis-ci.org/there4/slim-test-helpers.svg?branch=master)](https://travis-ci.org/there4/slim-test-helpers) [![Code Climate](https://codeclimate.com/github/there4/slim-test-helpers/badges/gpa.svg)](https://codeclimate.com/github/there4/slim-test-helpers)
+# Slim Test Helpers [![Build Status](https://travis-ci.org/there4/slim-test-helpers.svg?branch=master)](https://travis-ci.org/there4/slim-test-helpers) [![Code Climate](https://codeclimate.com/github/there4/slim-test-helpers/badges/gpa.svg)](https://codeclimate.com/github/there4/slim-test-helpers) [![Code Climate](https://codeclimate.com/github/there4/slim-test-helpers/badges/gpa.svg)](https://codeclimate.com/github/there4/slim-test-helpers)
 > Integration testing helpers for the Slim Framework 3
 
 For a full example, please see the companion repo at [there4/slim-unit-testing-example][example].
@@ -19,9 +19,10 @@ class VersionTest extends LocalWebTestCase {
 }
 ```
 
-Here is an example on how to pass data to a POST endpoint in a test case and retrieve it later in the endpoint.   
-We are passing encoded JSON data in the body of the request.   
-The data is retrieved in the endpoint using ```$app->request->getBody()```.
+Here is an example on how to pass data to a POST endpoint in a test case and 
+retrieve it later in the endpoint. We are passing encoded JSON data in the body
+of the request. The data is retrieved in the endpoint using 
+```$app->request->getBody()```.
 
 ```php
 // test file
@@ -38,26 +39,28 @@ class UserTest extends LocalWebTestCase {
 // endpoint file
 .....
 $app->post('/user', function() use ($app){
-   .....
-   $data = $app->request->getBody();
-   $data = json_decode($data, true);
-   ......
+    .....
+    $data = $app->request->getBody();
+    $data = json_decode($data, true);
+    ......
 });
 ```
 
 ### Example with DbUnit
 
-If you wish to use Database fixture, use class `WebDbTestCase`. Caution: make sure the names you use for you fixture models won't conflict with your actual DB tables.
+If you wish to use Database fixture, use class `WebDbTestCase`. *Caution*: Make 
+sure the names you use for you fixture models won't conflict with your actual
+DB tables.
 
 ```php
 class LocalDbWebTestCase extends \There4\Slim\Test\WebDbTestCase {
-	/**
-	 * You must implement this method
-	 * @return PHPUnit_Extensions_Database_DataSet_IDataSet
-	 */
-	public function getDataSet() {
-		return $this->createFlatXMLDataSet(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fixture.xml');
-	}
+    /**
+     * You must implement this method
+     * @return PHPUnit_Extensions_Database_DataSet_IDataSet
+     */
+    public function getDataSet() {
+        return $this->createFlatXMLDataSet(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fixture.xml');
+    }
 }
 ```
 
