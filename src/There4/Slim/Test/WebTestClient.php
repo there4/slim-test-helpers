@@ -88,6 +88,8 @@ class WebTestClient
         $env = Slim\Environment::getInstance();
         $this->app->router = new NoCacheRouter($this->app->router);
         $this->app->request = new Slim\Http\Request($env);
+        // Custom headers
+        $this->app->request->headers = new Slim\Http\Headers($env);
         $this->app->response = new Slim\Http\Response();
 
         // Establish some useful references to the slim app properties
