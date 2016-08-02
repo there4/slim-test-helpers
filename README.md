@@ -1,4 +1,4 @@
-# Slim Test Helpers [![Build Status](https://travis-ci.org/there4/slim-test-helpers.svg?branch=master)](https://travis-ci.org/there4/slim-test-helpers) [![Code Climate](https://codeclimate.com/github/there4/slim-test-helpers/badges/gpa.svg)](https://codeclimate.com/github/there4/slim-test-helpers) [![Code Climate](https://codeclimate.com/github/there4/slim-test-helpers/badges/gpa.svg)](https://codeclimate.com/github/there4/slim-test-helpers)
+# Slim Test Helpers [![Build Status](https://travis-ci.org/there4/slim-test-helpers.svg?branch=master)](https://travis-ci.org/there4/slim-test-helpers) [![Code Climate](https://codeclimate.com/github/there4/slim-test-helpers/badges/gpa.svg)](https://codeclimate.com/github/there4/slim-test-helpers) [![Test Coverage](https://codeclimate.com/github/there4/slim-test-helpers/badges/coverage.svg)](https://codeclimate.com/github/there4/slim-test-helpers/coverage)
 > Integration testing helpers for the Slim Framework 3
 
 For a full example, please see the companion repo at [there4/slim-unit-testing-example][example].
@@ -10,8 +10,10 @@ application config. We're asserting that Slim responded with a `200` and that
 the version matches what we expect.
 
 ```php
-class VersionTest extends LocalWebTestCase {
-    public function testVersion() {
+class VersionTest extends LocalWebTestCase
+{
+    public function testVersion()
+    {
         $this->client->get('/version');
         $this->assertEquals(200, $this->client->response->status());
         $this->assertEquals($this->app->config('version'), $this->client->response->body());
@@ -26,8 +28,10 @@ of the request. The data is retrieved in the endpoint using
 
 ```php
 // test file
-class UserTest extends LocalWebTestCase {
-    public function testVersion() {
+class UserTest extends LocalWebTestCase
+{
+    public function testVersion()
+    {
         ......
         $data = array("user" => 1);
         $data = json_encode($data);
@@ -38,7 +42,7 @@ class UserTest extends LocalWebTestCase {
 
 // endpoint file
 .....
-$app->post('/user', function() use ($app){
+$app->post('/user', function() use ($app) {
     .....
     $data = $app->request->getBody();
     $data = json_decode($data, true);
@@ -53,13 +57,17 @@ sure the names you use for you fixture models won't conflict with your actual
 DB tables.
 
 ```php
-class LocalDbWebTestCase extends \There4\Slim\Test\WebDbTestCase {
+class LocalDbWebTestCase extends \There4\Slim\Test\WebDbTestCase
+{
     /**
      * You must implement this method
      * @return PHPUnit_Extensions_Database_DataSet_IDataSet
      */
-    public function getDataSet() {
-        return $this->createFlatXMLDataSet(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fixture.xml');
+    public function getDataSet()
+    {
+        return $this->createFlatXMLDataSet(
+            dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fixture.xml'
+        );
     }
 }
 ```
