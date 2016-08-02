@@ -9,9 +9,9 @@
         {
             "name": "Craig Davis",
             "email": "craig@there4development.com"
-	}, {
-	    "name": "Guillermo A. Fisher",
-	    "homepage": "http://guillermoandraefisher.com"
+        }, {
+        "name": "Guillermo A. Fisher",
+        "homepage": "http://guillermoandraefisher.com"
         }
     ],
     "support": {
@@ -39,8 +39,8 @@
         }
     },
     "scripts": {
-        "test" : "vendor/bin/phpunit --verbose --coverage-text",
-        "sniff" : "vendor/bin/phpcs --standard=PSR2 --extensions=php src tests",
-				"fix": "vendor/bin/phpcbf --standard=PSR2 --extensions=php controllers models routes src tests"
+        "test": "vendor/bin/phpunit --verbose --coverage-text",
+        "sniff": "vendor/bin/phpcs --standard=PSR2 --extensions=php src tests",
+        "fix": "vendor/bin/phpcbf --standard=PSR2 --extensions=php controllers models routes src tests"
     }
 }
