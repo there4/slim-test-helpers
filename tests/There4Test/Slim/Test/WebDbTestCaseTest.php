@@ -12,6 +12,15 @@ class WebDbTestCaseTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('\PHPUnit_Extensions_Database_TestCase', $testCase);
     }
 
+    public function testSetup()
+    {
+        $testCase = new WebDbTestCase();
+        $testCase->setup();
+        $actual_class = get_class($testCase->client);
+        $expected_class = 'There4\Slim\Test\WebTestClient';
+        $this->assertEquals($expected_class, $actual_class);
+    }
+
     public function testGetSlimInstance()
     {
         $expectedConfig = array(
@@ -21,9 +30,17 @@ class WebDbTestCaseTest extends \PHPUnit_Framework_TestCase
         );
         $testCase = new WebDbTestCase();
         $slim = $testCase->getSlimInstance();
-        $this->assertInstanceOf('\Slim\Slim', $slim);
+        $this->assertInstanceOf('\Slim\App', $slim);
         foreach ($expectedConfig as $key => $value) {
-            $this->assertSame($expectedConfig[$key], $slim->config($key));
+              $this->assertEquals($expectedConfig[$key], $slim->getContainer()->get('settings')[$key]);
         }
+    }
+
+    public function testGetDataset()
+    {
+        $testCase = new WebDbTestCase();
+        $actual_ds = get_class($testCase->getDataSet());
+        $expected_ds = 'PHPUnit_Extensions_Database_DataSet_QueryDataSet';
+        $this->assertEquals($expected_ds, $actual_ds);
     }
 }

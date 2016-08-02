@@ -10,7 +10,7 @@ class WebTestCaseTest extends \PHPUnit_Framework_TestCase
     {
         $testCase = new WebTestCase();
         $testCase->setup();
-        $this->assertInstanceOf('\Slim\Slim', $testCase->getSlimInstance());
+        $this->assertInstanceOf('\Slim\App', $testCase->getSlimInstance());
     }
 
     public function testGetSlimInstance()
@@ -22,9 +22,9 @@ class WebTestCaseTest extends \PHPUnit_Framework_TestCase
         );
         $testCase = new WebTestCase();
         $slim = $testCase->getSlimInstance();
-        $this->assertInstanceOf('\Slim\Slim', $slim);
+        $this->assertInstanceOf('\Slim\App', $slim);
         foreach ($expectedConfig as $key => $value) {
-            $this->assertSame($expectedConfig[$key], $slim->config($key));
+            $this->assertSame($expectedConfig[$key], $slim->getContainer()->get('settings')[$key]);
         }
     }
 }
