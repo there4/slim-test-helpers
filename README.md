@@ -1,5 +1,8 @@
-# Slim Test Helpers [![Build Status](https://travis-ci.org/there4/slim-test-helpers.svg?branch=master)](https://travis-ci.org/there4/slim-test-helpers)
+# Slim 2 Test Helpers [![Build Status](https://travis-ci.org/there4/slim-test-helpers.svg?branch=master)](https://travis-ci.org/there4/slim-test-helpers)
 > Integration testing helpers for the Slim Framework
+
+These helpers are built for *[Slim Framework 2][docs]*. For the latest release
+please see [the master branch][master].
 
 For a full example, please see the companion repo at [there4/slim-unit-testing-example][example].
 
@@ -72,3 +75,5 @@ your app [by extending][webtestcase] the `WebTestCase` helper.
 [example]: https://github.com/there4/slim-unit-testing-example
 [bootstrap]: https://github.com/there4/slim-unit-testing-example/blob/master/tests/bootstrap.php
 [webtestcase]: https://github.com/there4/slim-test-helpers/blob/master/src/There4/Slim/Test/WebTestCase.php
+[docs]: http://docs.slimframework.com/
+[master]: https://github.com/there4/slim-test-helpers/tree/master
