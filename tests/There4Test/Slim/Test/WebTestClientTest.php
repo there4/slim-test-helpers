@@ -2,11 +2,15 @@
 
 namespace There4Test\Slim\Test;
 
+use Slim\App;
 use There4\Slim\Test\WebTestCase;
 use There4\Slim\Test\WebTestClient;
 
 class WebTestClientTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var App
+     */
     private $slim;
 
     /**
@@ -20,8 +24,8 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
         $client = new WebTestClient($this->getSlimInstance());
         $expectedOutput = 'This is a test!';
         call_user_func(array($client, $name), $uri, $input);
-        $this->assertEquals(200, $client->response->getStatusCode());
-        $this->assertEquals($expectedOutput, (string)$client->response->getBody());
+        self::assertEquals(200, $client->response->getStatusCode());
+        self::assertEquals($expectedOutput, (string)$client->response->getBody());
     }
 
     /**
@@ -41,12 +45,12 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
 
         $client = new WebTestClient($this->getSlimInstance());
         $client->get('/12');
-        $this->assertEquals(200, $client->response->getStatusCode());
-        $this->assertEquals('12', (string)$client->response->getBody());
+        self::assertEquals(200, $client->response->getStatusCode());
+        self::assertEquals('12', (string)$client->response->getBody());
 
         $client->get('/14');
-        $this->assertEquals(200, $client->response->getStatusCode());
-        $this->assertEquals('14', (string)$client->response->getBody());
+        self::assertEquals(200, $client->response->getStatusCode());
+        self::assertEquals('14', (string)$client->response->getBody());
     }
 
     public function testBodyResponse()
@@ -56,10 +60,11 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
         });
 
         $client = new WebTestClient($this->getSlimInstance());
-        $body = $client->get('/');
-        $this->assertEquals('body', $body);
+        $body   = $client->get('/');
+
+        self::assertEquals('body', $body);
     }
-  
+
     public function testPostParametersTransferred()
     {
         $this->getSlimInstance()->post('/post', function ($req, $res) {
@@ -67,34 +72,40 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
         });
 
         $client = new WebTestClient($this->getSlimInstance());
-        $data = ['test' => 'data'];
-        $body = $client->post('/post', $data);
-        $this->assertEquals(json_encode($data), $body);
+        $data   = ['test' => 'data'];
+        $body   = $client->post('/post', $data);
+
+        self::assertEquals(json_encode($data), $body);
     }
 
     public function getValidRequests()
     {
         $methods = $this->getValidRequestMethods();
         $uri = $this->getValidUri();
-        return array_map(function ($value) use ($uri) {
-            $input = ($value == 'post') ? ['test => data'] : array();
-            return array($value, $uri, $input);
-        }, $methods);
+        return array_map(
+            function ($value) use ($uri) {
+                $input = ($value == 'post') ? ['test => data'] : array();
+                return array($value, $uri, $input);
+            },
+            $methods
+        );
     }
 
     private function getSlimInstance()
     {
         if (!$this->slim) {
-            $testCase = new WebTestCase();
+            $testCase   = new WebTestCase();
             $this->slim = $testCase->getSlimInstance();
-            $methods = $this->getValidRequestMethods();
-            $callback = function ($req, $res) {
+            $methods    = $this->getValidRequestMethods();
+            $callback   = function ($req, $res) {
                 return $res->write('This is a test!');
             };
+
             foreach ($methods as $method) {
                 $this->slim->map([$method], $this->getValidUri(), $callback);
             }
         }
+
         return $this->slim;
     }
 
@@ -105,16 +116,24 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
         });
 
         $client = new WebTestClient($this->getSlimInstance());
-        $key = "my_cookie";
-        $value = "test";
+        $key    = "my_cookie";
+        $value  = "test";
         $client->setCookie($key, $value);
+
         $body = $client->get('/');
-        $this->assertEquals($value, $client->request->getCookieParams()[$key]);
+        self::assertEquals($value, $client->request->getCookieParams()[$key]);
     }
 
     private function getValidRequestMethods()
     {
-        return array('get', 'post', 'patch', 'put', 'delete', 'options', 'head');
+        return array(
+            'get',
+            'post',
+            'patch',
+            'put',
+            'delete',
+            'options',
+            'head');
     }
 
     private function getValidUri()

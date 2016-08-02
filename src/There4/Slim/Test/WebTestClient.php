@@ -3,7 +3,6 @@
 namespace There4\Slim\Test;
 
 use Slim\App;
-use Slim\Http\Body;
 use Slim\Http\Environment;
 use Slim\Http\Headers;
 use Slim\Http\Request;

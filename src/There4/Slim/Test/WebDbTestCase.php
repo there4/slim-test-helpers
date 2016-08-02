@@ -2,9 +2,6 @@
 
 namespace There4\Slim\Test;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
-use \Slim\App;
-
 class WebDbTestCase extends \PHPUnit_Extensions_Database_TestCase
 {
     /** @var \Slim\App */
@@ -20,8 +17,9 @@ class WebDbTestCase extends \PHPUnit_Extensions_Database_TestCase
     public function setup()
     {
         parent::setUp();
+
         // Establish a local reference to the Slim app object
-        $this->app = $this->getSlimInstance();
+        $this->app    = $this->getSlimInstance();
         $this->client = new WebTestClient($this->app);
     }
 
@@ -43,6 +41,8 @@ class WebDbTestCase extends \PHPUnit_Extensions_Database_TestCase
 
     public function getDataSet()
     {
-         return new \PHPUnit_Extensions_Database_DataSet_QueryDataSet($this->getConnection());
+         return new \PHPUnit_Extensions_Database_DataSet_QueryDataSet(
+             $this->getConnection()
+         );
     }
 }
