@@ -2,8 +2,6 @@
 
 namespace There4\Slim\Test;
 
-use \Slim\App;
-
 class WebTestCase extends \PHPUnit_Framework_TestCase
 {
     /** @var \Slim\App */
@@ -17,7 +15,7 @@ class WebTestCase extends \PHPUnit_Framework_TestCase
     {
         // Establish a local reference to the Slim app object
         // Ensure no cache Router
-        $this->app = $this->getSlimInstance();
+        $this->app    = $this->getSlimInstance();
         $this->client = new WebTestClient($this->app);
     }
 
