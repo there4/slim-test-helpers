@@ -20,8 +20,8 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
         $client = new WebTestClient($this->getSlimInstance());
         $expectedOutput = 'This is a test!';
         call_user_func(array($client, $name), $uri, $input);
-        $this->assertSame(200, $client->response->status());
-        $this->assertSame($expectedOutput, $client->response->body());
+        $this->assertEquals(200, $client->response->getStatusCode());
+        $this->assertEquals($expectedOutput, (string)$client->response->getBody());
     }
 
     /**
@@ -35,29 +35,41 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
 
     public function testMultipleRequest()
     {
-        $this->getSlimInstance()->get('/:id', function ($id) {
-            echo "$id";
+        $this->getSlimInstance()->get('/{id}', function ($req, $res, $args) {
+            return $res->write($args['id']);
         });
 
         $client = new WebTestClient($this->getSlimInstance());
         $client->get('/12');
-        $this->assertSame(200, $client->response->status());
-        $this->assertSame('12', $client->response->body());
+        $this->assertEquals(200, $client->response->getStatusCode());
+        $this->assertEquals('12', (string)$client->response->getBody());
 
         $client->get('/14');
-        $this->assertSame(200, $client->response->status());
-        $this->assertSame('14', $client->response->body());
+        $this->assertEquals(200, $client->response->getStatusCode());
+        $this->assertEquals('14', (string)$client->response->getBody());
     }
 
     public function testBodyResponse()
     {
-        $this->getSlimInstance()->get('/', function () {
-            echo "body";
+        $this->getSlimInstance()->get('/', function ($req, $res) {
+            return $res->write("body");
         });
 
         $client = new WebTestClient($this->getSlimInstance());
         $body = $client->get('/');
-        $this->assertSame('body', $body);
+        $this->assertEquals('body', $body);
+    }
+  
+    public function testPostParametersTransferred()
+    {
+        $this->getSlimInstance()->post('/post', function ($req, $res) {
+            return $res->write((string) $req->getBody());
+        });
+
+        $client = new WebTestClient($this->getSlimInstance());
+        $data = ['test' => 'data'];
+        $body = $client->post('/post', $data);
+        $this->assertEquals(json_encode($data), $body);
     }
 
     public function getValidRequests()
@@ -65,7 +77,7 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
         $methods = $this->getValidRequestMethods();
         $uri = $this->getValidUri();
         return array_map(function ($value) use ($uri) {
-            $input = ($value == 'post') ? 'test data' : array();
+            $input = ($value == 'post') ? ['test => data'] : array();
             return array($value, $uri, $input);
         }, $methods);
     }
@@ -76,19 +88,33 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
             $testCase = new WebTestCase();
             $this->slim = $testCase->getSlimInstance();
             $methods = $this->getValidRequestMethods();
-            $callback = function () {
-                echo 'This is a test!';
+            $callback = function ($req, $res) {
+                return $res->write('This is a test!');
             };
             foreach ($methods as $method) {
-                $this->slim->$method($this->getValidUri(), $callback);
+                $this->slim->map([$method], $this->getValidUri(), $callback);
             }
         }
         return $this->slim;
     }
 
+    public function testCookieSetInRequest()
+    {
+        $this->getSlimInstance()->get('/', function ($req, $res) {
+            return $res->write("body");
+        });
+
+        $client = new WebTestClient($this->getSlimInstance());
+        $key = "my_cookie";
+        $value = "test";
+        $client->setCookie($key, $value);
+        $body = $client->get('/');
+        $this->assertEquals($value, $client->request->getCookieParams()[$key]);
+    }
+
     private function getValidRequestMethods()
     {
-        return array('get', 'post', 'patch', 'put', 'delete', 'options');
+        return array('get', 'post', 'patch', 'put', 'delete', 'options', 'head');
     }
 
     private function getValidUri()

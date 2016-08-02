@@ -2,11 +2,18 @@
 
 namespace There4\Slim\Test;
 
-use \Slim;
+use Slim\App;
+use Slim\Http\Body;
+use Slim\Http\Environment;
+use Slim\Http\Headers;
+use Slim\Http\Request;
+use Slim\Http\RequestBody;
+use Slim\Http\Response;
+use Slim\Http\Uri;
 
 class WebTestClient
 {
-    /** @var \Slim\Slim */
+    /** @var \Slim\App */
     public $app;
 
     /** @var  \Slim\Http\Request */
@@ -17,7 +24,7 @@ class WebTestClient
 
     private $cookies = array();
 
-    public function __construct(Slim\Slim $slim)
+    public function __construct(App $slim)
     {
         $this->app = $slim;
     }
@@ -66,48 +73,42 @@ class WebTestClient
     // slim environment
     private function request($method, $path, $data = array(), $optionalHeaders = array())
     {
-        // Capture STDOUT
-        ob_start();
-
+        //Make method uppercase
+        $method = strtoupper($method);
         $options = array(
-            'REQUEST_METHOD' => strtoupper($method),
-            'PATH_INFO'      => $path,
-            'SERVER_NAME'    => 'local.dev'
+            'REQUEST_METHOD' => $method,
+            'REQUEST_URI'    => $path
         );
 
-        if ($method === 'get') {
+        if ($method === 'GET') {
             $options['QUERY_STRING'] = http_build_query($data);
-        } elseif (is_array($data)) {
-            $options['slim.input']   = http_build_query($data);
         } else {
-            $options['slim.input']   = $data;
+            $params  = json_encode($data);
         }
 
         // Prepare a mock environment
-        Slim\Environment::mock(array_merge($options, $optionalHeaders));
-        $env = Slim\Environment::getInstance();
-        $this->app->router = new NoCacheRouter($this->app->router);
-        $this->app->request = new Slim\Http\Request($env);
-        // Custom headers
-        $this->app->request->headers = new Slim\Http\Headers($env);
-        $this->app->response = new Slim\Http\Response();
+        $env = Environment::mock(array_merge($options, $optionalHeaders));
+        $uri = Uri::createFromEnvironment($env);
+        $headers = Headers::createFromEnvironment($env);
+        $cookies = $this->cookies;
+        $serverParams = $env->all();
+        $body = new RequestBody();
 
-        // Establish some useful references to the slim app properties
-        $this->request  = $this->app->request();
-        $this->response = $this->app->response();
-
-        //apply cookies (if present)
-        if ($this->cookies) {
-            foreach ($this->cookies as $name => $value) {
-                $this->request->cookies->set($name, $value);
-            }
+        // Attach JSON request
+        if (isset($params)) {
+            $headers->set('Content-Type', 'application/json;charset=utf8');
+            $body->write($params);
         }
 
-        // Execute our app
-        $this->app->run();
+        $this->request  = new Request($method, $uri, $headers, $cookies, $serverParams, $body);
+        $response = new Response();
 
-        // Return the application output. Also available in `response->body()`
-        return ob_get_clean();
+        // Invoke request
+        $app = $this->app;
+        $this->response = $app($this->request, $response);
+
+        // Return the application output.
+        return (string)$this->response->getBody();
     }
 
     public function setCookie($name, $value)
