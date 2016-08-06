@@ -18,7 +18,6 @@
         "issues": "https://github.com/there4/slim-test-helpers/issues",
         "source": "https://github.com/there4/slim-test-helpers"
     },
-    "minimum-stability": "dev",
     "require": {
         "slim/slim": "3.*",
         "phpunit/phpunit": "5.*",
@@ -27,7 +26,7 @@
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "2.*",
-        "codeclimate/php-test-reporter": "dev-master"
+        "codeclimate/php-test-reporter": "^0.3"
     },
     "autoload": {
         "psr-0": {
