@@ -9,9 +9,10 @@
         {
             "name": "Craig Davis",
             "email": "craig@there4development.com"
-        }, {
-        "name": "Guillermo A. Fisher",
-        "homepage": "http://guillermoandraefisher.com"
+        },
+        {
+            "name": "Guillermo A. Fisher",
+            "homepage": "http://guillermoandraefisher.com"
         }
     ],
     "support": {
