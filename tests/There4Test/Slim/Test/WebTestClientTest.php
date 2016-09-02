@@ -140,4 +140,26 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
     {
         return '/testing';
     }
+
+    public function testInternalError()
+    {
+        $this->getSlimInstance()->get('/internalerror', function ($request, $response, $args) {
+            throw new \Exception('Testing /internalerror.');
+            return $response;
+        });
+
+        $container = $this->getSlimInstance()->getContainer();
+        $container['errorHandler'] = function ($c) {
+            return function ($request, $response, $exception) use ($c) {
+                $data = array('message' => 'Internal Server Error');
+                return $c['response']->withJson($data, 500);
+            };
+        };
+
+        $client = new WebTestClient($this->getSlimInstance());
+        $client->get('/internalerror');
+        self::assertEquals(500, $client->response->getStatusCode());
+        $data = json_decode($client->response->getBody());
+        self::assertEquals('Internal Server Error', $data->message);
+    }
 }
