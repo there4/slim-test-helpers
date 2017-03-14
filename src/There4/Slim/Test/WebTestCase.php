@@ -2,7 +2,7 @@
 
 namespace There4\Slim\Test;
 
-class WebTestCase extends \PHPUnit_Framework_TestCase
+class WebTestCase extends \PHPUnit\Framework\TestCase
 {
     /** @var \Slim\App */
     protected $app;
