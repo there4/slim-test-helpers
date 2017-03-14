@@ -2,7 +2,7 @@
 
 namespace There4\Slim\Test;
 
-class WebDbTestCase extends \PHPUnit_Extensions_Database_TestCase
+class WebDbTestCase extends \PHPUnit\DbUnit\TestCase
 {
     /** @var \Slim\App */
     protected $app;
