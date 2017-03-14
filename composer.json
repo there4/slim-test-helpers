@@ -21,7 +21,7 @@
     },
     "require": {
         "slim/slim": "3.*",
-        "phpunit/phpunit": "^4.8|5.*",
+        "phpunit/phpunit": "^4.8|5.*|6.*",
         "phpunit/dbunit": "2.*",
         "illuminate/database": ">=4.0"
     },
