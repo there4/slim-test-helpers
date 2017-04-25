@@ -102,9 +102,9 @@ class WebTestClient
         $this->request  = new Request($method, $uri, $headers, $cookies, $serverParams, $body);
         $response = new Response();
 
-        // Invoke request
+        // Process request
         $app = $this->app;
-        $this->response = $app($this->request, $response);
+        $this->response = $app->process($this->request, $response);
 
         // Return the application output.
         return (string)$this->response->getBody();
