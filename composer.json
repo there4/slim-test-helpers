@@ -20,9 +20,9 @@
         "source": "https://github.com/there4/slim-test-helpers"
     },
     "require": {
-        "slim/slim": "~3.1",
-        "phpunit/phpunit": "^4.8|5.*",
-        "phpunit/dbunit": "2.*",
+        "slim/slim": "3.*",
+        "phpunit/phpunit": "^4.8|5.*|6.*",
+        "phpunit/dbunit": "2.*|3.*",
         "illuminate/database": ">=4.0"
     },
     "require-dev": {
