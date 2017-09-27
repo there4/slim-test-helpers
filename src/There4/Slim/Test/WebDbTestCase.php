@@ -2,7 +2,11 @@
 
 namespace There4\Slim\Test;
 
-class WebDbTestCase extends \PHPUnit_Extensions_Database_TestCase
+use PDO;
+use PHPUnit\DbUnit\TestCase;
+use PHPUnit\DbUnit\DataSet\QueryDataSet;
+
+class WebDbTestCase extends TestCase
 {
     /** @var \Slim\App */
     protected $app;
@@ -33,7 +37,7 @@ class WebDbTestCase extends \PHPUnit_Extensions_Database_TestCase
     public function getConnection()
     {
         if ($this->conn === null) {
-            $pdo = new \PDO('sqlite::memory:');
+            $pdo = new PDO('sqlite::memory:');
             $this->conn = $this->createDefaultDBConnection($pdo, ':memory:');
         }
         return $this->conn;
@@ -41,8 +45,8 @@ class WebDbTestCase extends \PHPUnit_Extensions_Database_TestCase
 
     public function getDataSet()
     {
-         return new \PHPUnit_Extensions_Database_DataSet_QueryDataSet(
+        return new QueryDataSet(
              $this->getConnection()
-         );
+        );
     }
 }

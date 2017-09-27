@@ -2,15 +2,16 @@
 
 namespace There4Test\Slim\Test;
 
+use PHPUnit\Framework\TestCase;
 use There4\Slim\Test\WebDbTestCase;
 
-class WebDbTestCaseTest extends \PHPUnit_Framework_TestCase
+class WebDbTestCaseTest extends TestCase
 {
     public function testExtendsDbUnit()
     {
         $testCase = new WebDbTestCase();
         self::assertInstanceOf(
-            '\PHPUnit_Extensions_Database_TestCase',
+            '\PHPUnit\DbUnit\TestCase',
             $testCase
         );
     }
@@ -46,10 +47,10 @@ class WebDbTestCaseTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDataset()
     {
-        $testCase        = new WebDbTestCase();
-        $actualDataSet   = get_class($testCase->getDataSet());
-        $expectedDataSet = 'PHPUnit_Extensions_Database_DataSet_QueryDataSet';
-
-        self::assertEquals($expectedDataSet, $actualDataSet);
+        $testCase = new WebDbTestCase();
+        self::assertInstanceOf(
+            '\PHPUnit\DbUnit\DataSet\QueryDataSet',
+            $testCase->getDataSet()
+        );
     }
 }
