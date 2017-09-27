@@ -2,11 +2,13 @@
 
 namespace There4Test\Slim\Test;
 
+use Exception;
+use PHPUnit\Framework\TestCase;
 use Slim\App;
 use There4\Slim\Test\WebTestCase;
 use There4\Slim\Test\WebTestClient;
 
-class WebTestClientTest extends \PHPUnit_Framework_TestCase
+class WebTestClientTest extends TestCase
 {
     /**
      * @var App
@@ -144,7 +146,7 @@ class WebTestClientTest extends \PHPUnit_Framework_TestCase
     public function testInternalError()
     {
         $this->getSlimInstance()->get('/internalerror', function ($request, $response, $args) {
-            throw new \Exception('Testing /internalerror.');
+            throw new Exception('Testing /internalerror.');
             return $response;
         });
 
