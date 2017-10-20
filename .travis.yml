@@ -1,24 +1,61 @@
 language: php
 
-php:
-  - 5.5
-  - 5.6
-  - 7.0
+env:
+  global:
+    - TASK_TESTS_COVERAGE=0
+    - USE_LOWEST_DEPENDENCIES=0
 
 matrix:
+  fast_finish: true
   include:
     - php: 5.5
-      env: dependencies=lowest
+      env: USE_LOWEST_DEPENDENCIES=1
+
+    - php: 5.6
+
+    - php: 7.0
+
+    # Only run coverage on 7.1
+    - php: 7.1
+      env:
+        - TASK_TESTS_COVERAGE=1
+
+    - php: 7.2
+
+  allow_failures:
+    - php: 7.2
+
+install:
+  # show versions and env information
+  - php --version
+  - composer --version
+  - pg_config --version
+
+  # disable xdebug for performance reasons when code coverage is not needed.
+  - |
+    if [[ $TASK_TESTS_COVERAGE != 1 ]]; then
+      phpenv config-rm xdebug.ini || echo "xdebug is not installed"
+    fi
+
+  # Install dependencies
+  - travis_retry composer self-update
+  - if [ $USE_LOWEST_DEPENDENCIES == 0 ]; then composer install --no-interaction; fi;
+  - if [ $USE_LOWEST_DEPENDENCIES == 1 ]; then composer update --prefer-lowest --no-interaction; fi;
 
 before_script:
-  - composer self-update -q
-  - if [ -z "$dependencies" ]; then composer install --no-interaction; fi;
-  - if [ "$dependencies" = "lowest" ]; then composer update --prefer-lowest --no-interaction; fi;
+  # Enable code coverage
+  - |
+    if [ $TASK_TESTS_COVERAGE == 1 ]; then
+      PHPUNIT_FLAGS="--coverage-clover=$TRAVIS_BUILD_DIR/build/logs/clover.xml"
+    fi
 
 script:
-  - vendor/bin/phpunit --verbose --coverage-text --coverage-clover build/logs/clover.xml
   - vendor/bin/phpcs --standard=PSR2 --extensions=php src tests
+  - vendor/bin/phpunit --verbose $PHPUNIT_FLAGS
 
 after_script:
-  - CODECLIMATE_REPO_TOKEN="c64749943f452f321fb2f11676453b71404edd1a36df06ab06c2337d6cbe9980" vendor/bin/test-reporter --stdout > codeclimate.json
-  - "curl -X POST -d @codeclimate.json -H 'Content-Type: application/json' -H 'User-Agent: Code Climate (PHP Test Reporter v0.1.1)' https://codeclimate.com/test_reports"
+  - |
+    if [ $TASK_TESTS_COVERAGE == 1 ]; then
+      CODECLIMATE_REPO_TOKEN="c64749943f452f321fb2f11676453b71404edd1a36df06ab06c2337d6cbe9980" vendor/bin/test-reporter --stdout > codeclimate.json
+      curl -X POST -d @codeclimate.json -H 'Content-Type: application/json' -H 'User-Agent: Code Climate (PHP Test Reporter v0.1.1)' https://codeclimate.com/test_reports
+    fi
