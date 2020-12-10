@@ -30,11 +30,9 @@ class WebTestClientTest extends TestCase
         self::assertEquals($expectedOutput, (string)$client->response->getBody());
     }
 
-    /**
-     * @expectedException \BadMethodCallException
-     */
     public function testInvalidRequestMethods()
     {
+        $this->expectException(\BadMethodCallException::class);
         $client = new WebTestClient($this->getSlimInstance());
         $client->foo($this->getValidUri());
     }

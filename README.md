@@ -21,9 +21,9 @@ class VersionTest extends LocalWebTestCase
 }
 ```
 
-Here is an example on how to pass data to a POST endpoint in a test case and 
+Here is an example on how to pass data to a POST endpoint in a test case and
 retrieve it later in the endpoint. We are passing encoded JSON data in the body
-of the request. The data is retrieved in the endpoint using 
+of the request. The data is retrieved in the endpoint using
 `$app->request->getBody()`.
 
 ```php
@@ -48,28 +48,6 @@ $app->post('/user', function() use ($app) {
     $data = json_decode($data, true);
     ......
 });
-```
-
-### Example with DbUnit
-
-If you wish to use Database fixture, use class `WebDbTestCase`. *Caution*: Make 
-sure the names you use for you fixture models won't conflict with your actual
-DB tables.
-
-```php
-class LocalDbWebTestCase extends \There4\Slim\Test\WebDbTestCase
-{
-    /**
-     * You must implement this method
-     * @return PHPUnit_Extensions_Database_DataSet_IDataSet
-     */
-    public function getDataSet()
-    {
-        return $this->createFlatXMLDataSet(
-            dirname(__FILE__) . DIRECTORY_SEPARATOR . 'fixture.xml'
-        );
-    }
-}
 ```
 
 ## Setup

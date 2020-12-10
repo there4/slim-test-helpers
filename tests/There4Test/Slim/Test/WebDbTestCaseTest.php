@@ -11,7 +11,7 @@ class WebDbTestCaseTest extends TestCase
     {
         $testCase = new WebDbTestCase();
         self::assertInstanceOf(
-            '\PHPUnit\DbUnit\TestCase',
+            '\PHPUnit\Framework\TestCase',
             $testCase
         );
     }
@@ -43,14 +43,5 @@ class WebDbTestCaseTest extends TestCase
                 $slim->getContainer()->get('settings')[$key]
             );
         }
-    }
-
-    public function testGetDataset()
-    {
-        $testCase = new WebDbTestCase();
-        self::assertInstanceOf(
-            '\PHPUnit\DbUnit\DataSet\QueryDataSet',
-            $testCase->getDataSet()
-        );
     }
 }
