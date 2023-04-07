@@ -21,10 +21,16 @@
     },
     "require": {
         "php": "^8.2.3",
-        "slim/slim": "~3.1",
+        "slim/slim": "~3.13.1",
         "phpunit/phpunit": "9.*",
-        "illuminate/database": "^8.17"
+        "illuminate/database": "^9"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:daysofwonder/Slim.git"
+        }
+    ],
     "require-dev": {
         "squizlabs/php_codesniffer": "3.*"
     },
