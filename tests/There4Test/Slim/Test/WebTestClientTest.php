@@ -24,7 +24,7 @@ class WebTestClientTest extends TestCase
     public function testValidRequests($name, $uri, $input)
     {
         $client = new WebTestClient($this->getSlimInstance());
-        $expectedOutput = 'This is a test!';
+        $expectedOutput = $name === 'HEAD' ? '' : 'This is a test!';
         call_user_func(array($client, $name), $uri, $input);
         self::assertEquals(200, $client->response->getStatusCode());
         self::assertEquals($expectedOutput, (string)$client->response->getBody());
@@ -84,7 +84,7 @@ class WebTestClientTest extends TestCase
         $uri = $this->getValidUri();
         return array_map(
             function ($value) use ($uri) {
-                $input = ($value == 'post') ? ['test => data'] : array();
+                $input = ($value == 'POST') ? ['test => data'] : array();
                 return array($value, $uri, $input);
             },
             $methods
@@ -127,13 +127,13 @@ class WebTestClientTest extends TestCase
     private function getValidRequestMethods()
     {
         return array(
-            'get',
-            'post',
-            'patch',
-            'put',
-            'delete',
-            'options',
-            'head');
+            'GET',
+            'POST',
+            'PATCH',
+            'PUT',
+            'DELETE',
+            'OPTIONS',
+            'HEAD');
     }
 
     private function getValidUri()
@@ -148,13 +148,15 @@ class WebTestClientTest extends TestCase
             return $response;
         });
 
-        $container = $this->getSlimInstance()->getContainer();
-        $container['errorHandler'] = function ($c) {
-            return function ($request, $response, $exception) use ($c) {
-                $data = array('message' => 'Internal Server Error');
-                return $c['response']->withJson($data, 500);
-            };
-        };
+        $app = $this->getSlimInstance();
+        $errorMiddleware = $app->addErrorMiddleware(true, true, true);
+        $errorMiddleware->setDefaultErrorHandler(function ($request, $exception, $displayErrorDetails) use ($app) {
+            $data = array('message' => 'Internal Server Error');
+            $response = $app->getResponseFactory()->createResponse();
+            $response->getBody()->write(json_encode($data, JSON_UNESCAPED_UNICODE));
+
+            return $response->withStatus(500)->withHeader('Content-Type', 'application/json');
+        });
 
         $client = new WebTestClient($this->getSlimInstance());
         $client->get('/internalerror');

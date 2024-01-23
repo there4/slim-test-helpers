@@ -3,22 +3,28 @@
 namespace There4\Slim\Test;
 
 use Slim\App;
-use Slim\Http\Environment;
-use Slim\Http\Headers;
-use Slim\Http\Request;
-use Slim\Http\RequestBody;
-use Slim\Http\Response;
-use Slim\Http\Uri;
+// use Slim\Http\Environment;
+// use Slim\Http\Headers;
+// use Slim\Http\Request;
+// use Slim\Http\RequestBody;
+// use Slim\Http\Response;
+
+use Slim\Psr7\Environment;
+use Slim\Psr7\Factory\StreamFactory;
+use Slim\Psr7\Headers;
+use Slim\Psr7\Request as SlimRequest;
+use Slim\Psr7\Response as SlimResponse;
+use Slim\Psr7\Uri;
 
 class WebTestClient
 {
     /** @var \Slim\App */
     public $app;
 
-    /** @var  \Slim\Http\Request */
+    /** @var  \Slim\Psr7\Request */
     public $request;
 
-    /** @var  \Slim\Http\Response */
+    /** @var  \Slim\Psr7\Response */
     public $response;
 
     private $cookies = array();
@@ -79,32 +85,56 @@ class WebTestClient
             'REQUEST_URI'    => $path
         );
 
+        $query = '';
         if ($method === 'GET') {
-            $options['QUERY_STRING'] = http_build_query($data);
+            $query = http_build_query($data);
         } else {
             $params  = json_encode($data);
         }
 
         // Prepare a mock environment
         $env = Environment::mock(array_merge($options, $optionalHeaders));
-        $uri = Uri::createFromEnvironment($env);
-        $headers = Headers::createFromEnvironment($env);
+        
+        // $uri = Uri::createFromEnvironment($env);
+        $uri = new Uri($env['REQUEST_SCHEME'], $env['SERVER_NAME'], $env['SERVER_PORT'], $path, $query);
+        $handle = fopen('php://temp', 'w+');
+        $stream = (new StreamFactory())->createStreamFromResource($handle);
+
+        $headerdata = [];
+        $special = [
+            'CONTENT_TYPE' => 1,
+            'CONTENT_LENGTH' => 1,
+            'PHP_AUTH_USER' => 1,
+            'PHP_AUTH_PW' => 1,
+            'PHP_AUTH_DIGEST' => 1,
+            'AUTH_TYPE' => 1,
+        ];
+        foreach ($env as $key => $value) {
+            $key = strtoupper($key);
+            if (isset($special[$key]) || strpos($key, 'HTTP_') === 0) {
+                if ($key !== 'HTTP_CONTENT_LENGTH') {
+                    $headerdata[$key] =  $value;
+                }
+            }
+        }
+        $headers = new Headers($headerdata);
+
+        // $headers = Headers::createFromEnvironment($env);
         $cookies = $this->cookies;
-        $serverParams = $env->all();
-        $body = new RequestBody();
+
+        // $serverParams = $env->all();
+        // $body = new RequestBody();
 
         // Attach JSON request
         if (isset($params)) {
-            $headers->set('Content-Type', 'application/json;charset=utf8');
-            $body->write($params);
+            $headers->addHeader('Content-Type', 'application/json;charset=utf8');
+            $stream->write($params);
         }
 
-        $this->request  = new Request($method, $uri, $headers, $cookies, $serverParams, $body);
-        $response = new Response();
+        $this->request  = new SlimRequest(strtoupper($method), $uri, $headers, $cookies, $env /* $serverParams */, $stream);
 
         // Process request
-        $app = $this->app;
-        $this->response = $app->process($this->request, $response);
+        $this->response = $this->app->handle($this->request);
 
         // Return the application output.
         return (string)$this->response->getBody();

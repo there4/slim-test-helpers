@@ -1,7 +1,9 @@
 <?php
 namespace There4\Slim\Test;
 
+use Illuminate\Container\Container;
 use \Slim\App;
+use Slim\Factory\AppFactory;
 
 /**
  * Static class to get configured Slim App Instance for use for TestCases
@@ -24,12 +26,11 @@ class SlimInstance
             'routerCacheFile' => false
         );
 
-        // Merge user settings
-        $settings = array(
-            'settings' => array_merge($defaultSettings, $settings)
-        );
+        $container = new Container();
+        $container['settings'] = array_merge($defaultSettings, $settings);
 
         // Create App
-        return new App($settings);
+        AppFactory::setContainer($container);
+        return AppFactory::create();
     }
 }
