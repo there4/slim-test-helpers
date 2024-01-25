@@ -2,6 +2,7 @@
 namespace There4\Slim\Test;
 
 use Illuminate\Container\Container;
+use Illuminate\Support\Collection;
 use \Slim\App;
 use Slim\Factory\AppFactory;
 
@@ -28,9 +29,12 @@ class SlimInstance
 
         $container = new Container();
         $container['settings'] = array_merge($defaultSettings, $settings);
+        $container['environment'] = new Collection();
+
 
         // Create App
         AppFactory::setContainer($container);
+        
         return AppFactory::create();
     }
 }

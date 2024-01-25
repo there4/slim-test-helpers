@@ -3,17 +3,11 @@
 namespace There4\Slim\Test;
 
 use Slim\App;
-// use Slim\Http\Environment;
-// use Slim\Http\Headers;
-// use Slim\Http\Request;
-// use Slim\Http\RequestBody;
-// use Slim\Http\Response;
 
 use Slim\Psr7\Environment;
 use Slim\Psr7\Factory\StreamFactory;
 use Slim\Psr7\Headers;
 use Slim\Psr7\Request as SlimRequest;
-use Slim\Psr7\Response as SlimResponse;
 use Slim\Psr7\Uri;
 
 class WebTestClient
@@ -94,7 +88,7 @@ class WebTestClient
 
         // Prepare a mock environment
         $env = Environment::mock(array_merge($options, $optionalHeaders));
-        
+
         // $uri = Uri::createFromEnvironment($env);
         $uri = new Uri($env['REQUEST_SCHEME'], $env['SERVER_NAME'], $env['SERVER_PORT'], $path, $query);
         $handle = fopen('php://temp', 'w+');
