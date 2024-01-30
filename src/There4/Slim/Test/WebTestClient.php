@@ -21,7 +21,7 @@ class WebTestClient
     /** @var  \Slim\Psr7\Response */
     public $response;
 
-    private $cookies = array();
+    protected $cookies = array();
 
     public function __construct(App $slim)
     {
@@ -70,7 +70,7 @@ class WebTestClient
 
     // Abstract way to make a request to SlimPHP, this allows us to mock the
     // slim environment
-    private function request($method, $path, $data = array(), $optionalHeaders = array())
+    protected function request($method, $path, $data = array(), $optionalHeaders = array())
     {
         //Make method uppercase
         $method = strtoupper($method);

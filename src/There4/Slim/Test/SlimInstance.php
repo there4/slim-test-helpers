@@ -5,6 +5,7 @@ use Illuminate\Container\Container;
 use Illuminate\Support\Collection;
 use \Slim\App;
 use Slim\Factory\AppFactory;
+use Slim\Psr7\Environment;
 
 /**
  * Static class to get configured Slim App Instance for use for TestCases
@@ -28,8 +29,8 @@ class SlimInstance
         );
 
         $container = new Container();
-        $container['settings'] = array_merge($defaultSettings, $settings);
-        $container['environment'] = new Collection();
+        $container['settings'] = new Collection(array_merge($defaultSettings, $settings));
+        $container['environment'] = new Collection(Environment::mock());
 
 
         // Create App
