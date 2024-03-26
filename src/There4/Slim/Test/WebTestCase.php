@@ -11,7 +11,7 @@ class WebTestCase extends \PHPUnit\Framework\TestCase
     protected $client;
 
     // Run for each unit test to setup our slim app environment
-    public function setup()
+    protected function setUp() : void
     {
         // Establish a local reference to the Slim app object
         // Ensure no cache Router

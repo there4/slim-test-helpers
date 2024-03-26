@@ -3,8 +3,7 @@
 namespace There4\Slim\Test;
 
 use PDO;
-use PHPUnit\DbUnit\TestCase;
-use PHPUnit\DbUnit\DataSet\QueryDataSet;
+use \PHPUnit\Framework\TestCase;
 
 class WebDbTestCase extends TestCase
 {
@@ -15,10 +14,20 @@ class WebDbTestCase extends TestCase
     public $client;
 
     /** Database Connection **/
-    protected $conn;
+    private static $conn;
+
+    public static function setUpBeforeClass() : void
+    {
+        self::$conn = new PDO('sqlite::memory:');
+    }
+
+    public static function tearDownAfterClass(): void
+    {
+        self::$conn = null;
+    }
 
     // Run for each unit test to setup our slim app environment
-    public function setup()
+    protected function setUp() : void
     {
         parent::setUp();
 
@@ -29,24 +38,13 @@ class WebDbTestCase extends TestCase
 
     // Instantiate a Slim application for use in our testing environment. You
     // will most likely override this for your own application.
-    public function getSlimInstance()
+    public function getSlimInstance() : object
     {
         return SlimInstance::getInstance();
     }
 
-    public function getConnection()
+    public function getConnection() : object
     {
-        if ($this->conn === null) {
-            $pdo = new PDO('sqlite::memory:');
-            $this->conn = $this->createDefaultDBConnection($pdo, ':memory:');
-        }
-        return $this->conn;
-    }
-
-    public function getDataSet()
-    {
-        return new QueryDataSet(
-            $this->getConnection()
-        );
+        return static::$conn;
     }
 }
